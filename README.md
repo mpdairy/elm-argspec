@@ -68,7 +68,7 @@ initialSizeOption = Option { short = Nothing
                            , arguments = Just <| Argument "sizeX" &&& Argument "sizeY" }
 ```
 
-Short arguments that require arguments should not be grouped.
+Short options that require arguments should not be grouped.
 
 ### Optional
 
