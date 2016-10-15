@@ -47,7 +47,14 @@ Maybe.map (\ rs -> if getCommand "once" rs then
                       ...)
           rscan
 ```
+But it's better to use `getCommand` and `getArgument` in an
+applicative style to build an actual data type like:
 
+```elm
+type Control = Polling Int Int
+             | Reset
+             | Once Int
+```
 See
 [Example.elm](https://github.com/mpdairy/elm-argspec/blob/master/src/Example.elm)
 for a more complicated Spec example.
