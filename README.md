@@ -87,9 +87,9 @@ This spec requires the command named "optional" at the beginning and
 at the end the command "finished" and a laser color, and it will match
 any of the optional stuff if it's there. The following would match:
 ```
-"optional finished red"
-"optional dust 3.0 later finished green"
-"optional --initial-size 240 320 later finished blue"
+optional finished red
+optional dust 3.0 later finished green
+optional --initial-size 240 320 later finished blue
 ```
 
 ### (&&&) and (|||)
