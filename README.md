@@ -3,7 +3,7 @@ ArgSpec is a library for Elm that allows you to specify a spec for a
 list of strings that represent arguments, options, commands, etc,
 useful for parsing interop from Javascript or from the commandline
 using Node.js and libraries like
-[Worker](http://package.elm-lang.org/packages/lukewestby/worker/latest)
+[Worker](http://package.elm-lang.org/packages/lukewestby/worker/latest).
 
 ###Example
 
@@ -45,7 +45,7 @@ Maybe.map (\ rs -> if getCommand "once" rs then
           rscan
 ```
 
-See the
+See
 [Example.elm](https://github.com/mpdairy/elm-argspec/blob/master/src/Example.elm)
 for a more complicated Spec example.
 
