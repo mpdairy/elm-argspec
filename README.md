@@ -31,7 +31,10 @@ rscan : Maybe ArgScan
 rscan = scan appSpec ["once", "100"]
 ```
 
-The `ArgScan` stores commands in a `Set`, options in another `Set`, and arguments in
+If `scan` can't find a match, it will return `Nothing`; otherwise, it
+returns Just an `ArgScan`.
+
+An `ArgScan` stores commands in a `Set`, options in another `Set`, and arguments in
 a `Dict`. To check if individual commands or options have been scanned, you can use
 `getCommand` and `getOption`. To get the (Maybe value) for an argument that
 has been scanned, use `getArgument`. Otherwise, you can directly 
