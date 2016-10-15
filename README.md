@@ -31,7 +31,7 @@ rscan : Maybe ArgScan
 rscan = scan appSpec ["once", "100"]
 ```
 
-If `scan` can't find a match, it will return `Nothing`; otherwise, it
+If `scan` can't find a match, it will return `Nothing`. Otherwise, it
 returns Just an `ArgScan`.
 
 An `ArgScan` stores commands in a `Set`, options in another `Set`, and arguments in
