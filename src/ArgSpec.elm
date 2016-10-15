@@ -1,5 +1,6 @@
-module ArgSpec exposing (ArgSpec (Command, Argument, Option, Optional)
-                        , OptionInfo, (&&&), (|||), ArgScan, scan )
+module ArgSpec exposing (ArgSpec (Command, Argument, Option, Optional, And, Or)
+                        , OptionInfo, (&&&), (|||), ArgScan, scan
+                        , getCommand, getArgument, getOption )
 
 {-| Library for parsing command line arguments. You can form parsers that are similar
     to [http://docopt.org/](DocOpt) with positional commands, arguments, and options.
@@ -10,7 +11,7 @@ module ArgSpec exposing (ArgSpec (Command, Argument, Option, Optional)
 @docs ArgSpec, (&&&), (|||), OptionInfo
 
 # Scanning
-@docs scan, ArgScan
+@docs scan, ArgScan, getCommand, getOption, getArgument
 
 -}
 
@@ -75,7 +76,19 @@ infixl 3 &&&
 (|||) : ArgSpec -> ArgSpec -> ArgSpec
 (|||) = Or
 infixl 2 |||
---
+
+{-| Checks if a particular command was scanned -}
+getCommand : Name -> ArgScan -> Bool
+getCommand name argscan = Set.member name (argscan.commands)
+
+{-| Checks if a particular option was scanned -}
+getOption : Name -> ArgScan -> Bool
+getOption name argscan = Set.member name (argscan.options)
+
+{-| Returns Just an argument's value (String) or Nothing if the arg was not scanned.  -}
+getArgument : Name -> ArgScan -> Maybe ArgVal
+getArgument name argscan = Dict.get name (argscan.arguments)
+
 {-| Scans argument list and tries to match it to the ArgSpec. If it cannot find a match,
     it returns Nothing. Otherwise, it returns an ArgScan. -}
 scan : ArgSpec -> List String -> Maybe ArgScan

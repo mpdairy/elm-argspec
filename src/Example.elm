@@ -42,9 +42,9 @@ demoSpec = Command "start" &&& Argument "port" &&& Argument "numPlayers"
                &&& ( Command "living" ||| Command "trying" ||| Command "reading" )
            ||| Command "options" &&& Optional options
            ||| Command "optional"
-               &&& Optional [ Command "now" ||| Command "later"
+               &&& Optional [ Command "later"
                             , Command "dust" &&& Argument "dustMass" ]
-               &&& Command "finished" &&& Argument "laser"
+               &&& Command "finished" &&& Argument "laserColor"
 --
 runDemos : List (Maybe ArgScan)
 runDemos =
@@ -57,3 +57,12 @@ runDemos =
         List.map (\ s -> Debug.log ("\n\n\"" ++ s ++ "\"\n") <|
                       scan demoSpec (String.split " " s))
             args
+--
+appSpec : ArgSpec
+appSpec = Command "polling" &&& Argument "interval" &&& Argument "timeout"
+          ||| Command "reset"
+          ||| Command "once" &&& Argument "timeout"
+--
+rscan : Maybe ArgScan
+rscan = scan appSpec ["polling", "100", "800ms"]
+--
