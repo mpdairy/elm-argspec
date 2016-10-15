@@ -105,4 +105,4 @@ I'm planning to implement a `printHelp` function that prints out a
 pretty, instructional version of any `ArgSpec`, like you would see on
 a command line. Any options in the printed spec will be displayed in
 their shortest version in the structure, grouped if possible, then
-listed alphabetically below the entire argument structure.
+listed alphabetically, with descriptions, below the entire argument structure.
