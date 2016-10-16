@@ -51,7 +51,7 @@ access the `Set`s and `Dict` in the `ArgScan` record with the fields
 
 Often times you'll want to convert what you've scanned, especially
 positional commands and arguments, into Elm data types. For
-the example spec named `appSpec`, we might want to get a `Control` type that
+the example spec used above, named `appSpec`, we might want to make a `Control` type that
 looks like this:
 
 ```elm
@@ -60,24 +60,23 @@ type Control = Polling Float Int
              | Once Int
 ```
 
-ArgSpec has provided some convenient applicative-style functions to
+ArgSpec provides some convenient applicative-style functions to
 help you do this::
 
 ```elm
 mControl : ArgScan -> Maybe Control
 mControl rscan = construct Polling (getCommand "polling" rscan)
-                   `withArgFloat` getArgument "percent" rscan
-                   `withArgInt` getArgument "timeout" rscan
+                   `withFloatArg` getArgument "percent" rscan
+                   `withIntArg` getArgument "timeout" rscan
                  <|>
-                 construct Reset (getCommand "reset") rscan
+                 construct Reset (getCommand "reset" rscan)
                  <|>
                  construct Once (getCommand "once" rscan)
-                   `withArgInt` getArgument "timeout") rscan
+                   `withIntArg` getArgument "timeout") rscan
 ```
 
-There is also `withArgString`. The `withArg` function allows you to
-specify a custom function for converting the string value of the
-argument, so you could even construct nested constructed types.
+There is also `withArgString`, and you can make your own `with____Arg`
+function using `withXArg`. For instance, you might make a `withBoolArg
 
 
 ## Options

@@ -2,7 +2,7 @@ module ArgSpec exposing (ArgSpec (Command, Argument, Option, Optional, And, Or)
                         , OptionInfo, (&&&), (|||), ArgScan, scan
                         , getCommand, getArgument, getOption
                         , construct, withArg, withArgR, maybeOr, (<|>)
-                        , withArgString, withArgFloat, withArgInt)
+                        , withStringArg, withFloatArg, withIntArg, withXArg, WithXArg)
 
 {-| Library for parsing command line arguments. You can form parsers that are similar
     to [http://docopt.org/](DocOpt) with positional commands, arguments, and options.
@@ -15,7 +15,7 @@ module ArgSpec exposing (ArgSpec (Command, Argument, Option, Optional, And, Or)
 # Scanning
 @docs scan, ArgScan, getCommand, getOption, getArgument
 
-@docs construct, withArgString, withArgFloat, withArgInt, withArg, withArgR, maybeOr, (<|>)
+@docs construct, withStringArg, withFloatArg, withIntArg, withXArg, WithXArg, withArg, withArgR, maybeOr, (<|>)
 
 -}
 
@@ -258,15 +258,28 @@ withArgR : Maybe (a -> b) -> (Maybe String, String -> Result c a) -> Maybe b
 withArgR mc (argResult, typeConv) = withArg mc (argResult, Result.toMaybe << typeConv)
 
 {-| ok -}
-withArgString : Maybe (String -> b) -> Maybe String -> Maybe b
-withArgString mc s = withArg mc (s, (\ str -> Just str ))
+withStringArg : Maybe (String -> b) -> Maybe String -> Maybe b
+withStringArg mc s = withArg mc (s, (\ str -> Just str ))
 
 {-| ok -}
-withArgInt : Maybe (Int -> b) -> Maybe String -> Maybe b
-withArgInt mc s = withArgR mc (s, String.toInt)
+withIntArg : Maybe (Int -> b) -> Maybe String -> Maybe b
+withIntArg mc s = withArgR mc (s, String.toInt)
 
 {-| ok -}
-withArgFloat : Maybe (Float -> b) -> Maybe String -> Maybe b
-withArgFloat mc s = withArgR mc (s, String.toFloat)
-
-
+withFloatArg : Maybe (Float -> b) -> Maybe String -> Maybe b
+withFloatArg mc s = withArgR mc (s, String.toFloat)
+--
+{-| ok -}
+type alias WithXArg a b = ( Maybe (a -> b) -> Maybe String -> Maybe b )
+{-| ok -}
+withXArg : (String -> Maybe a) -> WithXArg a b
+withXArg f = (\ mab ms -> withArg mab (ms, f))
+--
+withBoolArg : WithXArg Bool b
+withBoolArg = withXArg (\ s -> if s == "true" then
+                                   Just True
+                               else
+                                   if s == "false" then
+                                       Just False
+                                   else
+                                       Nothing )
