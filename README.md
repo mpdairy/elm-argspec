@@ -115,13 +115,15 @@ initialSizeOption = Option { short = Nothing
                            , arguments = Just <| Argument "sizeX" &&& Argument "sizeY" }
 ```
 
+The arguments after an option are just stored in a flat `Dict` along with all the other
+arguments, so be sure to use unique argument names.
+
 Short options that require arguments should not be grouped.
 
 ## Optional
 
 `Optional` takes a list of optional `ArgSpec`s. It matches as many as
-it can, which could be zero, and the scan continues. It's best to put
-your `Option`s in `Optional`, but you can also do other commands.
+it can, which could be zero, and the scan continues.
 
 ```elm
 sampleSpec = Command "optional"
@@ -138,6 +140,9 @@ optional finished red
 optional dust 3.0 later finished green
 optional --initial-size 240 320 later finished blue
 ```
+It's a good idea to store all your `Option`s in a list and then you
+can just plunk it inside an `Optional` to easily add options in
+multiple places.
 
 ## (&&&) and (|||)
 
