@@ -77,7 +77,7 @@ mControl rscan = construct Polling (getCommand "polling" rscan)
 
 There is also `withArgString`, and you can make your own `with____Arg`
 functions using `withXArg`. All you have to do is supply a function
-that converts a `String` to a `Maybe` of some other type.
+that converts a `String` to a `Maybe` of your desired type.
 For instance, you might want to make a `withBoolArg` function:
 
 ```elm
