@@ -76,8 +76,21 @@ mControl rscan = construct Polling (getCommand "polling" rscan)
 ```
 
 There is also `withArgString`, and you can make your own `with____Arg`
-function using `withXArg`. For instance, you might make a `withBoolArg
+function using `withXArg`. For instance, you might want to make a
+`withBoolArg` function:
 
+```elm
+withBoolArg : WithXArg Bool b
+withBoolArg = withXArg (\ s -> if s == "true" then
+                                   Just True
+                               else
+                                   if s == "false" then
+                                       Just False
+                                   else
+                                       Nothing )
+```
+
+Now you can use `withBoolArg` just like `withIntArg` and the others.
 
 ## Options
 
