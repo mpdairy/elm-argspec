@@ -118,7 +118,8 @@ initialSizeOption = Option { short = Nothing
 The arguments after an option are just stored in a flat `Dict` along with all the other
 arguments, so be sure to use unique argument names.
 
-Short options that require arguments should not be grouped.
+If multiple short options that also require arguments are grouped
+(`-abc`), the scan will fail.
 
 ## Optional
 
