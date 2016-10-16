@@ -20,8 +20,8 @@ This can be very easily represented with an ArgSpec:
 ```elm
 appSpec : ArgSpec
 appSpec = Command "polling" &&& Argument "percent" &&& Argument "timeout"
-       ||| Command "reset"
-       ||| Command "once" &&& Argument "timeout"
+          ||| Command "reset"
+          ||| Command "once" &&& Argument "timeout"
 ```
 
 Then you can use `scan` with a list of strings:
