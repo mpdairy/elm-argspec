@@ -75,7 +75,10 @@ mControl rscan = construct Polling (getCommand "polling" rscan)
                    `withIntArg` getArgument "timeout") rscan
 ```
 
-There is also `withArgString`, and you can make your own `with____Arg`
+There is also `withArgString`. `<|>` means "alternative" and will try
+the next construct if the previous fails.
+
+You can make your own `with____Arg`
 functions using `withXArg`. All you have to do is supply a function
 that converts a `String` to a `Maybe` of your desired type.
 For instance, you might want to make a `withBoolArg` function:
