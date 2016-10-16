@@ -1,6 +1,8 @@
 module ArgSpec exposing (ArgSpec (Command, Argument, Option, Optional, And, Or)
                         , OptionInfo, (&&&), (|||), ArgScan, scan
-                        , getCommand, getArgument, getOption )
+                        , getCommand, getArgument, getOption
+                        , construct, withArg, withArgR, maybeOr, (<|>)
+                        , withArgString, withArgFloat, withArgInt)
 
 {-| Library for parsing command line arguments. You can form parsers that are similar
     to [http://docopt.org/](DocOpt) with positional commands, arguments, and options.
@@ -12,6 +14,8 @@ module ArgSpec exposing (ArgSpec (Command, Argument, Option, Optional, And, Or)
 
 # Scanning
 @docs scan, ArgScan, getCommand, getOption, getArgument
+
+@docs construct, withArgString, withArgFloat, withArgInt, withArg, withArgR, maybeOr, (<|>)
 
 -}
 
@@ -181,6 +185,7 @@ scan' s =
                 )
 
 --        _ -> Nothing
+
 --
 handleOptional : List ArgSpec -> ArgScan -> ArgScan
 handleOptional optionals s =
@@ -212,9 +217,56 @@ tryOneOf f ls = case ls of
                     [] -> Nothing
                     (x::xs) -> f x `maybeOr` tryOneOf f xs
 --
+{-| ok -}
 maybeOr : Maybe a -> Maybe a -> Maybe a
 maybeOr m1 m2 = case m1 of
                 Nothing -> m2
                 Just _ -> m1
 --
+
+-- Maybe functor
+(<$>) : (a -> b) -> Maybe a -> Maybe b
+(<$>) = Maybe.map
+infixl 3 <$>
+
+-- Maybe applicative
+(<*>) : Maybe (a -> b) -> Maybe a -> Maybe b
+(<*>) mab ma = case (mab, ma) of
+                   (Nothing, _) -> Nothing
+                   (_, Nothing) -> Nothing
+                   (Just fab, Just a) -> Just <| fab a
+infixl 3 <*>
+
+-- Maybe alternative
+{-| ok -}
+(<|>) : Maybe a -> Maybe a -> Maybe a
+(<|>) = maybeOr
+infixl 2 <|>
+--
+
+{-| ok -}
+construct : a -> Bool -> Maybe a
+construct constructor bool = if bool then Just constructor else Nothing
+
+{-| ok -}
+withArg : Maybe (a -> b) -> (Maybe String, String -> Maybe a) -> Maybe b
+withArg mc (argResult, typeConv) =
+    mc <*> (argResult `andThen` typeConv)
+
+{-| ok -}
+withArgR : Maybe (a -> b) -> (Maybe String, String -> Result c a) -> Maybe b
+withArgR mc (argResult, typeConv) = withArg mc (argResult, Result.toMaybe << typeConv)
+
+{-| ok -}
+withArgString : Maybe (String -> b) -> Maybe String -> Maybe b
+withArgString mc s = withArg mc (s, (\ str -> Just str ))
+
+{-| ok -}
+withArgInt : Maybe (Int -> b) -> Maybe String -> Maybe b
+withArgInt mc s = withArgR mc (s, String.toInt)
+
+{-| ok -}
+withArgFloat : Maybe (Float -> b) -> Maybe String -> Maybe b
+withArgFloat mc s = withArgR mc (s, String.toFloat)
+
 

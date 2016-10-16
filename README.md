@@ -19,7 +19,7 @@ This can be very easily represented with an ArgSpec:
 
 ```elm
 appSpec : ArgSpec
-spec = Command "polling" &&& Argument "interval" &&& Argument "timeout"
+appSpec = Command "polling" &&& Argument "percent" &&& Argument "timeout"
        ||| Command "reset"
        ||| Command "once" &&& Argument "timeout"
 ```
@@ -34,6 +34,12 @@ rscan = scan appSpec ["once", "100"]
 If `scan` can't find a match, it will return `Nothing`. Otherwise, it
 returns Just an `ArgScan`.
 
+See
+[Example.elm](https://github.com/mpdairy/elm-argspec/blob/master/src/Example.elm)
+for a more complicated Spec example.
+
+## Using the ArgScan Result
+
 An `ArgScan` stores commands in a `Set`, options in another `Set`, and arguments in
 a `Dict`. To check if individual commands or options have been scanned, you can use
 `getCommand` and `getOption`. To get the (Maybe value) for an argument that
@@ -41,25 +47,40 @@ has been scanned, use `getArgument`. Otherwise, you can directly
 access the `Set`s and `Dict` in the `ArgScan` record with the fields
 `.commands`, `.options`, and `.arguments`.
 
-```elm
-Maybe.map (\ rs -> if getCommand "once" rs then
-                      let maybeTimeOut = getArgument "timeout" rs in
-                      ...)
-          rscan
-```
-But it's better to use `getCommand` and `getArgument` in an
-applicative style to build an actual data type like:
+### Constructing Union Types
+
+Often times you'll want to convert what you've scanned, especially
+positional commands and arguments, into Elm data types. For
+the example spec named `appSpec`, we might want to get a `Control` type that
+looks like this:
 
 ```elm
-type Control = Polling Int Int
+type Control = Polling Float Int
              | Reset
              | Once Int
 ```
-See
-[Example.elm](https://github.com/mpdairy/elm-argspec/blob/master/src/Example.elm)
-for a more complicated Spec example.
 
-### Options
+ArgSpec has provided some convenient applicative-style functions to
+help you do this::
+
+```elm
+mControl : ArgScan -> Maybe Control
+mControl rscan = construct Polling (getCommand "polling" rscan)
+                   `withArgFloat` getArgument "percent" rscan
+                   `withArgInt` getArgument "timeout" rscan
+                 <|>
+                 construct Reset (getCommand "reset") rscan
+                 <|>
+                 construct Once (getCommand "once" rscan)
+                   `withArgInt` getArgument "timeout") rscan
+```
+
+There is also `withArgString`. The `withArg` function allows you to
+specify a custom function for converting the string value of the
+argument, so you could even construct nested constructed types.
+
+
+## Options
 
 Options can be short (`-a`) or long (`--allude`) or both. Short
 options can be grouped together in the actual argument list, like
@@ -80,7 +101,7 @@ initialSizeOption = Option { short = Nothing
 
 Short options that require arguments should not be grouped.
 
-### Optional
+## Optional
 
 `Optional` takes a list of optional `ArgSpec`s. It matches as many as
 it can, which could be zero, and the scan continues. It's best to put
@@ -102,7 +123,7 @@ optional dust 3.0 later finished green
 optional --initial-size 240 320 later finished blue
 ```
 
-### (&&&) and (|||)
+## (&&&) and (|||)
 
 `&&&` is the `And` infix operator that specifies that ArgSpecs must be matched
 in order. `|||` is the `Or` infix operator and will just try the next
@@ -115,4 +136,10 @@ I'm planning to implement a `printHelp` function that prints out a
 pretty, instructional version of any `ArgSpec`, like you would see on
 a command line. Any options in the printed spec will be displayed in
 their shortest version in the structure, grouped if possible, then
-listed alphabetically, with descriptions, below the entire argument structure.
+listed alphabetically, with descriptions, below the entire argument
+structure.
+
+## Instructive Errors
+
+Rewriting `scan` to use `Result` instead of `Maybe` would allow for
+instructive errors, which would be nice for commandline usage.
