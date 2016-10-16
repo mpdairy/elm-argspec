@@ -84,7 +84,7 @@ that converts a `String` to a `Maybe` of your desired type.
 For instance, you might want to make a `withBoolArg` function:
 
 ```elm
-withBoolArg : WithXArg Bool b
+withBoolArg : WithXArg Bool a
 withBoolArg = withXArg (\ s -> if s == "true" then
                                    Just True
                                else

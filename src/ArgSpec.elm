@@ -275,7 +275,7 @@ type alias WithXArg a b = ( Maybe (a -> b) -> Maybe String -> Maybe b )
 withXArg : (String -> Maybe a) -> WithXArg a b
 withXArg f = (\ mab ms -> withArg mab (ms, f))
 --
-withBoolArg : WithXArg Bool b
+withBoolArg : WithXArg Bool a
 withBoolArg = withXArg (\ s -> if s == "true" then
                                    Just True
                                else
