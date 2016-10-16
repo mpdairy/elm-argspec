@@ -10,7 +10,7 @@ using Node.js and libraries like
 Let's say your program named `runApp` can take the following commands/args:
 
 ```
-runApp polling <interval> <timeout>
+runApp polling <percent> <interval>
 runApp reset
 runApp once <timeout>
 ```
@@ -19,7 +19,7 @@ This can be very easily represented with an ArgSpec:
 
 ```elm
 appSpec : ArgSpec
-appSpec = Command "polling" &&& Argument "percent" &&& Argument "timeout"
+appSpec = Command "polling" &&& Argument "percent" &&& Argument "interval"
           ||| Command "reset"
           ||| Command "once" &&& Argument "timeout"
 ```
@@ -33,10 +33,6 @@ rscan = scan appSpec ["once", "100"]
 
 If `scan` can't find a match, it will return `Nothing`. Otherwise, it
 returns Just an `ArgScan`.
-
-See
-[Example.elm](https://github.com/mpdairy/elm-argspec/blob/master/src/Example.elm)
-for a more complicated Spec example.
 
 ## Using the ArgScan Result
 
@@ -67,7 +63,7 @@ help you do this::
 mControl : ArgScan -> Maybe Control
 mControl rscan = construct Polling (getCommand "polling" rscan)
                    `withFloatArg` getArgument "percent" rscan
-                   `withIntArg` getArgument "timeout" rscan
+                   `withIntArg` getArgument "interval" rscan
                  <|>
                  construct Reset (getCommand "reset" rscan)
                  <|>
@@ -151,6 +147,10 @@ multiple places.
 in order. `|||` is the `Or` infix operator and will just try the next
 pattern if the first fails. `&&&` has higher precedence than `|||` so
 you can mostly use them without parens.
+
+See
+[Example.elm](https://github.com/mpdairy/elm-argspec/blob/master/src/Example.elm)
+for a complicated arg spec example.
 
 ## Pretty Auto-Printing
 
