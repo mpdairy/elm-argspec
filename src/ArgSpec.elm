@@ -2,7 +2,8 @@ module ArgSpec exposing (ArgSpec (Command, Argument, Option, Optional, And, Or)
                         , OptionInfo, (&&&), (|||), ArgScan, scan
                         , getCommand, getArgument, getOption
                         , construct, withArg, withArgR, maybeOr, (<|>)
-                        , withStringArg, withFloatArg, withIntArg, withXArg, WithXArg)
+                        , withStringArg, withFloatArg, withIntArg, withXArg, WithXArg
+                        , withConstruct)
 
 {-| Library for parsing command line arguments. You can form parsers that are similar
     to [http://docopt.org/](DocOpt) with positional commands, arguments, and options.
@@ -15,7 +16,7 @@ module ArgSpec exposing (ArgSpec (Command, Argument, Option, Optional, And, Or)
 # Scanning
 @docs scan, ArgScan, getCommand, getOption, getArgument
 
-@docs construct, withStringArg, withFloatArg, withIntArg, withXArg, WithXArg, withArg, withArgR, maybeOr, (<|>)
+@docs construct, withStringArg, withFloatArg, withIntArg, withXArg, WithXArg, withConstruct, withArg, withArgR, maybeOr, (<|>)
 
 -}
 
@@ -247,6 +248,10 @@ infixl 2 <|>
 {-| ok -}
 construct : a -> Bool -> Maybe a
 construct constructor bool = if bool then Just constructor else Nothing
+--
+{-| ok -}
+withConstruct : Maybe (a -> b) -> Maybe a -> Maybe b
+withConstruct = (<*>)
 
 {-| ok -}
 withArg : Maybe (a -> b) -> (Maybe String, String -> Maybe a) -> Maybe b

@@ -18,8 +18,8 @@ runApp once <timeout>
 This can be very easily represented with an ArgSpec:
 
 ```elm
-appSpec : ArgSpec
-appSpec = Command "polling" &&& Argument "percent" &&& Argument "interval"
+controlSpec : ArgSpec
+controlSpec = Command "polling" &&& Argument "percent" &&& Argument "interval"
           ||| Command "reset"
           ||| Command "once" &&& Argument "timeout"
 ```
@@ -28,7 +28,7 @@ Then you can use `scan` with a list of strings:
 
 ```elm
 rscan : Maybe ArgScan
-rscan = scan appSpec ["once", "100"]
+rscan = scan controlSpec ["once", "100"]
 ```
 
 If `scan` can't find a match, it will return `Nothing`. Otherwise, it
@@ -47,7 +47,7 @@ access the `Set`s and `Dict` in the `ArgScan` record with the fields
 
 Often times you'll want to convert what you've scanned, especially
 positional commands and arguments, into Elm data types. For
-the example spec used above, named `appSpec`, we might want to make a `Control` type that
+the example spec used above, named `controlSpec`, we might want to make a `Control` type that
 looks like this:
 
 ```elm
@@ -91,6 +91,25 @@ withBoolArg = withXArg (\ s -> if s == "true" then
 ```
 
 Now you can use `withBoolArg` just like `withIntArg` and the others.
+
+There is also `withConstruct` which allows you to nest constructs.
+
+```elm
+serverSpec = ArgSpec
+serverSpec = Command "start" &&& Argument "serverName" &&& controlSpec
+             ||| Command "stop" &&& Argument "goodbyeMessage"
+ 
+data Server = Start String Control
+            | Stop String
+ 
+mServer : ArgScan -> Maybe Server
+mServer = construct Start (getCommand "start" rscan)
+             `withStringArg` getArgument "serverName" rscan
+             `withConstruct` mControl rscan
+          <|>
+          construct Stop (getCommand "stop" rscan)
+             `withStringArg` getArgument "goodbyeMessage" rscan
+```
 
 ## Options
 
