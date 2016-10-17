@@ -68,7 +68,7 @@ mControl rscan = construct Polling (getCommand "polling" rscan)
                  construct Reset (getCommand "reset" rscan)
                  <|>
                  construct Once (getCommand "once" rscan)
-                    `withIntArg` getArgument "timeout") rscan
+                    `withIntArg` getArgument "timeout" rscan
 ```
 
 There is also `withArgString`. `<|>` means "alternative" and will try
