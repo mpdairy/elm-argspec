@@ -73,8 +73,8 @@ mControl rscan = construct Polling (getCommand "polling" rscan)
 
 There is also `withArgString`. `<|>` means "alternative" and will try
 the next construct if the previous fails (You can use also use
-`maybeOr` inline if you don't like fancy inline symbols, but you have
-to use parens around both sides).
+`maybeOr` inline if you don't like fancy inline symbols, but you'll have
+to use parens around its arguments).
 
 You can make your own `with____Arg`
 functions using `withXArg`. All you have to do is supply a function
