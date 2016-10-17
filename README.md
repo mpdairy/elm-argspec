@@ -142,19 +142,19 @@ put your options. It matches as many as it can, which could be none,
 then continues to scan.
 
 ```elm
-sampleSpec = Command "optional"
+sampleSpec = Command "demo"
              &&& Optional [ Command "later"
                           , Command "dust" &&& Argument "dustMass"
                           , initialSizeOption ]
              &&& Command "finished" &&& Argument "laserColor"
 ```
-This spec requires the command named "optional" at the beginning and
+This spec requires the command named "demo" at the beginning and
 at the end the command "finished" and a laser color, and it will match
 any of the optional stuff if it's there. The following would match:
 ```
-optional finished red
-optional dust 3.0 later finished green
-optional --initial-size 240 320 later finished blue
+demo finished red
+demo dust 3.0 later finished green
+demo --initial-size 240 320 later finished blue
 ```
 It's a good idea to store all your `Option`s in a list and then you
 can just plunk it inside an `Optional` to easily add options in
