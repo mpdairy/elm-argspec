@@ -135,6 +135,32 @@ initialSizeOption = Option { short = Nothing
 The arguments after an option are just stored in a flat `Dict` along with all the other
 arguments, so be sure to use unique argument names.
 
+### Optional
+
+`Optional` takes a list of optional `ArgSpec`s, and is a good place to
+put your options. It matches as many as it can, which could be none, and the scan continues.
+
+```elm
+sampleSpec = Command "optional"
+             &&& Optional [ Command "later"
+                          , Command "dust" &&& Argument "dustMass"
+                          , initialSizeOption ]
+             &&& Command "finished" &&& Argument "laserColor"
+```
+This spec requires the command named "optional" at the beginning and
+at the end the command "finished" and a laser color, and it will match
+any of the optional stuff if it's there. The following would match:
+```
+optional finished red
+optional dust 3.0 later finished green
+optional --initial-size 240 320 later finished blue
+```
+It's a good idea to store all your `Option`s in a list and then you
+can just plunk it inside an `Optional` to easily add options in
+multiple places.
+
+### Using Options
+
 Using options that have no arguments is easy with `getOption`, which
 just returns `True` if the option has been set, or `False` otherwise:
 
@@ -163,30 +189,6 @@ could do:
 
 If multiple short options that also require arguments are grouped
 (`-abc`), the scan will fail.
-
-## Optional
-
-`Optional` takes a list of optional `ArgSpec`s. It matches as many as
-it can, which could be zero, and the scan continues.
-
-```elm
-sampleSpec = Command "optional"
-             &&& Optional [ Command "later"
-                          , Command "dust" &&& Argument "dustMass"
-                          , initialSizeOption ]
-             &&& Command "finished" &&& Argument "laserColor"
-```
-This spec requires the command named "optional" at the beginning and
-at the end the command "finished" and a laser color, and it will match
-any of the optional stuff if it's there. The following would match:
-```
-optional finished red
-optional dust 3.0 later finished green
-optional --initial-size 240 320 later finished blue
-```
-It's a good idea to store all your `Option`s in a list and then you
-can just plunk it inside an `Optional` to easily add options in
-multiple places.
 
 ## (&&&) and (|||)
 
