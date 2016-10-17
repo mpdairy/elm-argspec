@@ -105,12 +105,12 @@ data Server = Start String Control
             | Stop String
  
 mServer : ArgScan -> Maybe Server
-mServer = construct Start (getCommand "start" rscan)
-             `withStringArg` getArgument "serverName" rscan
-             `withConstruct` mControl rscan
-          <|>
-          construct Stop (getCommand "stop" rscan)
-             `withStringArg` getArgument "goodbyeMessage" rscan
+mServer rscan = construct Start (getCommand "start" rscan)
+                   `withStringArg` getArgument "serverName" rscan
+                   `withConstruct` mControl rscan
+                <|>
+                construct Stop (getCommand "stop" rscan)
+                   `withStringArg` getArgument "goodbyeMessage" rscan
 ```
 
 ## Options
