@@ -177,7 +177,7 @@ would with commands, and use `withDefault` from the `Maybe` module to set the de
 settings = { windowSize = withDefault (Vector 1027 768) <|
                           construct Vector (getOption "initialSize" rscan)
                                    `withIntArg` getArgument "sizeX" rscan
-                                   `withIntArg` getArgument "sizeY rscan }
+                                   `withIntArg` getArgument "sizeY" rscan }
 ```
 If you just have an option with a single argument, like a `Float`, you
 could do:
