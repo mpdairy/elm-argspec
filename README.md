@@ -10,9 +10,9 @@ using Node.js and libraries like
 Let's say your program named `runApp` can take the following commands/args:
 
 ```
-runApp polling <percent> <interval>
-runApp reset
-runApp once <timeout>
+./runApp polling <percent> <interval>
+./runApp reset
+./runApp once <timeout>
 ```
 
 This can be very easily represented with an ArgSpec:
