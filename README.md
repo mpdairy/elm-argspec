@@ -138,7 +138,8 @@ arguments, so be sure to use unique argument names.
 ### Optional
 
 `Optional` takes a list of optional `ArgSpec`s, and is a good place to
-put your options. It matches as many as it can, which could be none, and the scan continues.
+put your options. It matches as many as it can, which could be none,
+then continues to scan.
 
 ```elm
 sampleSpec = Command "optional"
