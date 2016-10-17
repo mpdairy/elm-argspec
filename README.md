@@ -133,6 +133,32 @@ initialSizeOption = Option { short = Nothing
 The arguments after an option are just stored in a flat `Dict` along with all the other
 arguments, so be sure to use unique argument names.
 
+Using options that have no arguments is easy with `getOption`, which
+just returns `True` if the option has been set, or `False` otherwise:
+
+```elm
+settings = { headlessMode = getOption "headless" rscan
+           , trampoline = getOption "trampoline" rscan }
+```
+
+For options that require arguments, you can construct types as you
+would with commands, and use `withDefault` from the `Maybe` module to set the default:
+
+```elm
+settings = { windowSize = withDefault (Vector 1027 768) <|
+                          construct Vector (getOption "initialSize" rscan)
+                                   `withIntArg` getArgument "sizeX" rscan
+                                   `withIntArg` getArgument "sizeY rscan }
+```
+If you just have an option with a single argument, like a `Float`, you
+could do:
+
+```elm
+{ brightness = withDefault 1.0 <|
+               construct identity (getOption "brightness" rscan)
+                        `withFloatArg` getArgument "brightness" rscan }
+```
+
 If multiple short options that also require arguments are grouped
 (`-abc`), the scan will fail.
 
