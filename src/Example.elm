@@ -62,7 +62,7 @@ appSpec : ArgSpec
 appSpec = Command "polling" &&& Argument "interval" &&& Argument "timeout"
           ||| Command "reset"
           ||| Command "once" &&& Argument "timeout"
---
+---
 rscan : Maybe ArgScan
 rscan = scan appSpec ["polling", "100", "800ms"]
 --
