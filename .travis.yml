@@ -25,7 +25,6 @@ install:
   - npm --version
   - cd tests
   - npm install -g elm@$ELM_VERSION elm-test
-  - npm install
   - elm package install --yes
   - cd ..
   
