@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/mpdairy/elm-argspec.svg?branch=master)](https://travis-ci.org/mpdairy/elm-argspec)
 
 ArgSpec is a library for Elm that allows you to specify a spec for a
 list of strings that represent arguments, options, commands, etc,
