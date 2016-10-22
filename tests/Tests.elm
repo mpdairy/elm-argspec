@@ -48,6 +48,9 @@ all =
         [ test "Addition" <|
             \ () ->
                 Expect.equal (3 + 7) 10
+        , test "Should Fail" <|
+            \ () ->
+                Expect.equal 3 8
         , test "String.left" <|
             \ () ->
                 Expect.equal "a" (String.left 1 "abcdefg")
