@@ -161,6 +161,19 @@ It's a good idea to store all your `Option`s in a list and then you
 can just plunk it inside an `Optional` to easily add options in
 multiple places.
 
+#### Abiguity with Optional Arguments
+
+There might be some ambiguity with optional items which could cause
+the `scan` to succeed when it should actually fail. For instance, both
+of the following will succeed:
+
+```
+demo --initial-size 240 320 later finished blue
+demo --initial-size 240 later finished blue
+```
+The first case is correct, but the second case incorrectly consumes `later` as
+the second argument to `initial-size`. I am not sure how to remove this ambiguity.
+
 ### Using Options
 
 Using options that have no arguments is easy with `getOption`, which
