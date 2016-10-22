@@ -29,4 +29,4 @@ install:
   - elm package install --yes
 
 script:
-  - elm-test
+  - elm test
