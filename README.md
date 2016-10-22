@@ -100,10 +100,10 @@ There is also `withConstruct` which allows you to nest constructs.
 serverSpec = ArgSpec
 serverSpec = Command "start" &&& Argument "serverName" &&& controlSpec
              ||| Command "stop" &&& Argument "goodbyeMessage"
- 
+
 data Server = Start String Control
             | Stop String
- 
+
 mServer : ArgScan -> Maybe Server
 mServer rscan = construct Start (getCommand "start" rscan)
                    `withStringArg` getArgument "serverName" rscan
